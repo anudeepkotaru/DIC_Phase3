@@ -73,4 +73,4 @@ def load_model():
 
 if __name__ == '__main__':
     model = load_model()
-    app.run()
+    app.run(port=1234)
