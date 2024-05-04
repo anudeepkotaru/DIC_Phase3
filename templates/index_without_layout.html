@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Credit Score Classification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column; /* Stack children vertically */
+            align-items: center; /* Center-align vertically for all items */
+        }
+        h1 {
+            margin-top: 20px; /* Add top margin to the title */
+            width: 100%; /* Full width to center the text properly */
+            text-align: center; /* Center text horizontally */
+        }
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 30%; /* Half the width of the body */
+            margin-top: 20px; /* Add some space above the form */
+        }
+        #result {
+            font-size: 20px;
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+        }
+        .good { color: green; }
+        .standard { color: blue; }
+        .poor { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Credit Score Classification</h1>
+    <form id="creditscore">
+        <p>Customer ID: <input type="text" name="Customer_ID"></p>
+        <p>Month: <input type="text" name="Month"></p>
+        <p>Age: <input type="number" name="Age"></p>
+        <p>Annual Income: <input type="number" name="Annual_Income" step="any"></p>
+        <p>Monthly Inhand Salary: <input type="number" name="Monthly_Inhand_Salary" step="any"></p>
+        <p>Number of Bank Accounts: <input type="number" name="Num_Bank_Accounts"></p>
+        <p>Number of Credit Cards: <input type="number" name="Num_Credit_Card"></p>
+        <p>Interest Rate: <input type="number" name="Interest_Rate" step="any"></p>
+        <p>Number of Loans: <input type="number" name="Num_of_Loan"></p>
+        <p>Delay from Due Date: <input type="number" name="Delay_from_due_date"></p>
+        <p>Number of Delayed Payments: <input type="number" name="Num_of_Delayed_Payment"></p>
+        <p>Changed Credit Limit: <input type="number" name="Changed_Credit_Limit" step="any"></p>
+        <p>Number of Credit Inquiries: <input type="number" name="Num_Credit_Inquiries"></p>
+        <p>Credit Mix: <input type="text" name="Credit_Mix"></p>
+        <p>Outstanding Debt: <input type="number" name="Outstanding_Debt" step="any"></p>
+        <p>Credit Utilization Ratio: <input type="number" name="Credit_Utilization_Ratio" step="any"></p>
+        <p>Credit History Age (Months): <input type="number" name="Credit_History_Age_Months"></p>
+        <p>Payment of Minimum Amount: <input type="text" name="Payment_of_Min_Amount"></p>
+        <p>Total EMI per Month: <input type="number" name="Total_EMI_per_month" step="any"></p>
+        <p>Amount Invested Monthly: <input type="number" name="Amount_invested_monthly" step="any"></p>
+        <p>Payment Behaviour: <input type="text" name="Payment_Behaviour"></p>
+        <p>Monthly Balance: <input type="number" name="Monthly_Balance" step="any"></p>
+        <p><button type="submit">Submit</button></p>
+    </form>
+    <div id="result"></div> <!-- Area to display the prediction result -->
+    <script>
+        document.getElementById('creditscore').onsubmit = function(event) {
+            event.preventDefault();  // Prevent the default form submission
+            var formData = new FormData(document.getElementById('creditscore'));
+            fetch('/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const result = document.getElementById('result');
+                result.textContent = 'Credit Score: ' + data.prediction;
+                // Applying color based on prediction value
+                if (data.prediction.toLowerCase() === 'good') {
+                    result.className = 'good';
+                } else if (data.prediction.toLowerCase() === 'standard') {
+                    result.className = 'standard';
+                } else if (data.prediction.toLowerCase() === 'poor') {
+                    result.className = 'poor';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        };
+    </script>
+</body>
+</html>
